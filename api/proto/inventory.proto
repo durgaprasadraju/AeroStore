@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package inventory;
+
+// This dictates the Go package name when generated
+option go_package = "github.com/durgaprasadraju/AeroStore/api/proto";
+
+// The Inventory Service Definition
+service InventoryService {
+  // Check if items are in stock and reserve them
+  rpc ReserveStock(ReserveStockRequest) returns (ReserveStockResponse);
+  
+  // Release stock if a payment fails
+  rpc ReleaseStock(ReleaseStockRequest) returns (ReleaseStockResponse);
+}
+
+message Item {
+  string product_id = 1;
+  int32 quantity = 2;
+}
+
+message ReserveStockRequest {
+  string order_id = 1;
+  repeated Item items = 2;
+}
+
+message ReserveStockResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message ReleaseStockRequest {
+  string order_id = 1;
+}
+
+message ReleaseStockResponse {
+  bool success = 1;
+}

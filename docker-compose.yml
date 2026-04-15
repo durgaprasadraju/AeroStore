@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  # PostgreSQL for Inventory and Orders
+  postgres:
+    image: postgres:15-alpine
+    container_name: aerostore-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: aerostore_db # We will create schemas per service inside this
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - aerostore-net
+
+  # Redis for Inventory Caching and Locking
+  redis:
+    image: redis:7-alpine
+    container_name: aerostore-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - aerostore-net
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  aerostore-net:
+    driver: bridge
